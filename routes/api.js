@@ -32,7 +32,7 @@ router.post('/hotel/add',function(req,res){
     newHotel.title = req.body.title;
     newHotel.save(function(err,insertedHotel){
 		if(err){
-			console.log('Error in saving video');
+			console.log('Error in saving hotel');
 		}else{
 			res.json(insertedHotel);
 		}
@@ -135,6 +135,107 @@ router.delete('/user/delete/:id',function(req,res){
 				res.json(deletedUser);
 			}
 		});
+});
+
+
+//Book room for user of a specific date range
+router.post('/user/room/book1 ',function(req,res){
+    
+	console.log('Add a Booking');
+	var newBooking = new Booking();
+	newBooking.room_id = req.body.room_id;
+	newBooking.user_id = req.body.user_id;
+	newBooking.start_time = req.body.start_time;
+	newBooking.end_time = req.body.end_time;
+	newBooking.save(function(err,roombooking){
+	if(err){
+		console.log('Error in booking room');
+	}else{
+		res.json(roombooking);
+	}
+})
+});
+
+//Book room for user of a specific date range
+router.post('/user/room/book',function(req,res){
+    
+	console.log('Add a Booking');
+	Room.findByIdAndUpdate(req.body.room_id, {
+            $push: {"reserved_dates": {user_id: req.body.user_id,start_date: req.body.start_time, end_date: req.body.end_time}}
+        }, {
+            safe: true,
+            new: true
+        }, function(err, room){
+            if(err){
+                res.send(err);
+            } else {
+                res.json(room);
+            }
+        });
+});
+
+//Fetch all available hotel rooms for a specific date range
+router.post('/get/available/rooms1',function(req,res){
+		console.log('check available');
+		console.log(req.body.to.substring(0,10));
+	Room.find({
+		reserved_dates: { 
+			
+			$not: {
+					$elemMatch: {start_date: {$lte: req.body.to.substring(0,10)}, end_date: {$gte: req.body.from.substring(0,10)}}
+			}
+
+	}
+	},function(err,getrooms){
+		if(err){
+			console.log(err);
+		}
+		else{
+			res.json(getrooms);
+		}
+	})
+	
+});
+
+router.post('/get/available/rooms',function(req,res){
+	console.log('check available');
+	console.log(req.body.to.substring(0,10));
+Booking.find()
+				.where('start_time').gt(req.body.to.substring(0,10))
+				.where('end_time').lt(req.body.from.substring(0,10))
+				.select('room_id')
+				.exec(function(err,getrooms){
+					if(err){
+						console.log(err);
+					}
+					else{
+						res.json(getrooms);
+					}});	
+});
+
+router.post('/api/rooms', function(req, res) {
+
+	Room.find({
+			type: req.body.roomType,
+			beds: req.body.beds,
+			max_occupancy: {$gt: req.body.guests},
+			cost_per_night: {$gte: req.body.priceRange.lower, $lte: req.body.priceRange.upper},
+			reserved: { 
+
+					//Check if any of the dates the room has been reserved for overlap with the requsted dates
+					$not: {
+							$elemMatch: {from: {$lt: req.body.to.substring(0,10)}, to: {$gt: req.body.from.substring(0,10)}}
+					}
+
+			}
+	}, function(err, rooms){
+			if(err){
+					res.send(err);
+			} else {
+					res.json(rooms);
+			}
+	});
+
 });
 
 module.exports = router;
