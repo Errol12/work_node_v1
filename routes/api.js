@@ -5,7 +5,7 @@ const mongoose =  require('mongoose');
 const Hotel = require('../models/Hotel');
 const Room = require('../models/Room');
 const User = require('../models/User');
-const Booking = require('../models/Booking');
+const getAvailableDates = require('../functions/getAvailableDates');
 
 const db ="mongodb://localhost:27017/PeopleInteractive";
 mongoose.Promise = global.Promise;
@@ -138,23 +138,6 @@ router.delete('/user/delete/:id',function(req,res){
 });
 
 
-//Book room for user of a specific date range
-router.post('/user/room/book1 ',function(req,res){
-    
-	console.log('Add a Booking');
-	var newBooking = new Booking();
-	newBooking.room_id = req.body.room_id;
-	newBooking.user_id = req.body.user_id;
-	newBooking.start_time = req.body.start_time;
-	newBooking.end_time = req.body.end_time;
-	newBooking.save(function(err,roombooking){
-	if(err){
-		console.log('Error in booking room');
-	}else{
-		res.json(roombooking);
-	}
-})
-});
 
 //Book room for user of a specific date range
 router.post('/user/room/book',function(req,res){
@@ -175,29 +158,16 @@ router.post('/user/room/book',function(req,res){
 });
 
 //Fetch all available hotel rooms for a specific date range
-router.post('/get/available/rooms1',function(req,res){
+router.post('/get/available/rooms',function(req,res){
 		console.log('check available');
 		console.log(req.body.to.substring(0,10));
-	Room.find({
-		reserved_dates: { 
-			
-			$not: {
-					$elemMatch: {start_date: {$lte: req.body.to.substring(0,10)}, end_date: {$gte: req.body.from.substring(0,10)}}
-			}
-
-	}
-	},function(err,getrooms){
-		if(err){
-			console.log(err);
-		}
-		else{
-			res.json(getrooms);
-		}
-	})
-	
+	getAvailableDates.getAvailableDates(req.body.from,req.body.to)
+												.then(data => {
+														res.json(data);
+												}).catch(error => { console.log(error);})	
 });
 
-router.post('/get/available/rooms',function(req,res){
+router.post('/get/available/rooms1',function(req,res){
 	console.log('check available');
 	console.log(req.body.to.substring(0,10));
 Booking.find()
