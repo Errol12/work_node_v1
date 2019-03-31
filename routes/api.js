@@ -2,13 +2,12 @@ const express = require('express');
 const router = express.Router();
 const mongoose =  require('mongoose');
 
-const Hotel = require('../models/Hotel');
-const Room = require('../models/Room');
+
 const User = require('../models/User');
 const hotelFunctions = require('../functions/hotelFunctions');
 const roomFunctions = require('../functions/roomFunctions');
 
-const db ="mongodb://localhost:27017/PeopleInteractive";
+const db ="mongodb://localhost:27017/People2";
 mongoose.Promise = global.Promise;
 mongoose.connect(db,{ useNewUrlParser: true },function(err){
 	if(err){
@@ -30,7 +29,7 @@ router.post('/hotel/add',function(req,res){
     hotelFunctions.addHotel(new mongoose.Types.ObjectId(),req.body.title)
 												.then(data => {
 														res.json(data);
-												}).catch(error => { console.log(error);})
+												}).catch(error => { res.json(data);})
 
 
 });

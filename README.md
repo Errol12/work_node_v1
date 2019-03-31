@@ -21,7 +21,8 @@ Setup
         Goto the repo and run npm install to install the necessary pacakges for the project in order to avoid any package dependency issues
    </li>
    <li>Step5:- Download POSTMAN chrome extension to test the api </li>
-   <li>Step6:- Check the file help.docx for information regarding the working of the api</li>
+   <li>Step6:- Goto the root folder and run node server.js</li>
+   <li>Step7:- Check the file help.docx for information regarding the working of the api. I have attached screenshots and more information in that document</li>
 </ol>
 </div>
 <div>
