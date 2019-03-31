@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const mongoose =  require('mongoose');
-
+const Room = require('../models/Room');
 
 const User = require('../models/User');
 const hotelFunctions = require('../functions/hotelFunctions');
 const roomFunctions = require('../functions/roomFunctions');
 
-const db ="mongodb://localhost:27017/People2";
+const db ="mongodb://localhost:27017/PeopleInteractive";
 mongoose.Promise = global.Promise;
 mongoose.connect(db,{ useNewUrlParser: true },function(err){
 	if(err){
@@ -49,7 +49,7 @@ router.delete('/hotel/delete/:id',function(req,res){
 	
 	hotelFunctions.deleteHotel(req.params.id)
 			.then(data => {
-					res.json(data);
+					res.json("Hotel deleted");
 			}).catch(error => { console.log(error);})
 
 });

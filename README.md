@@ -2,7 +2,8 @@
 
 Following is the technology stack used to build the REST api:- <br>
 NodeJS Express Framework<br>
-MongoDB (Mongoose ORM)
+MongoDB (Mongoose ORM)<br>
+Mocha chai framework (for unit testing)
 
 The REST API are written mostly using Promises but few are also written using Callback
 
@@ -11,7 +12,7 @@ Setup
  <ol>
    <li>
       Step1:- Setup Mongodb and MongoDb Atlas <br>
-      Follow the stpes in the link :-https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
+      Follow the steps in the link :-https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
    </li>
    <li>Step2:- Create a database named PeopleInteractive</li>
    <li>Step3:- Inside the database create the following collections:- 

@@ -1,6 +1,6 @@
 process.env.NODE_ENV = 'test';
 
-let mongoose = require("mongoose");
+
 const Hotel = require('../models/Hotel');
 
 let chai = require('chai');
@@ -9,16 +9,16 @@ let server = require('../server');
 let should = chai.should();
 
 chai.use(chaiHttp);
-//Our parent block
+//Connection block
 describe('Hotels', () => {
     beforeEach((done) => { //Before each test we empty the database
         Hotel.remove({}, (err) => { 
            done();           
         });        
     });
-/*
-  * Test the /POST route
-  */
+
+
+//Using the POST Route
  describe('/POST hotel', () => {
     it('it should not POST if error', (done) => {
         let hotel = {

@@ -1,5 +1,5 @@
 const Hotel = require('../models/Hotel');
-
+const Room = require('../models/Room');
 
 const addHotel = (id,hotel_title) => {
     return new Promise(function(resolve,reject){
@@ -39,6 +39,7 @@ const updateHotel = (hotel_id,hotel_title) => {
 
 const deleteHotel = (hotel_id) => {
     return new Promise(function(resolve,reject){
+        
         Hotel.findByIdAndRemove(hotel_id,function(err,deletedHotel){
 			if(err){
                 console.log(err);
